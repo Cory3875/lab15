@@ -61,25 +61,49 @@ class MyApp:
 	def moveUp(self, event):   
 		global player
 		global drawpad
-                drawpad.move(player,0,-10)
+		global drawpadwidth
+		global drawpadheight
+                x1,y1,x2,y2 = drawpad.coords(player)
+                if y1 <= 13:
+                    drawpad.move(player,0,0)
+                else:
+                    drawpad.move(player,0,-10)
     
         def movedown(self, event):   
 		global player
 		global drawpad
-                drawpad.move(player,0,10) 
-        
+                global drawpadwidth
+		global drawpadheight
+                x1,y1,x2,y2 = drawpad.coords(player)
+                if y2 >= 320:
+                    drawpad.move(player,0,0)
+                else:
+                    drawpad.move(player,0,10)
+    
         
         def moveright(self, event):   
 		global player
 		global drawpad
-                drawpad.move(player,10,0)
-        
+                global drawpadwidth
+		global drawpadheight
+                x1,y1,x2,y2 = drawpad.coords(player)
+                if x2 >= 480:
+                    drawpad.move(player,0,0)
+                else:
+                    drawpad.move(player,10,0)
+    
         
         def moveleft(self, event):   
 		global player
 		global drawpad
-                drawpad.move(player,-10,0)
-        
+                global drawpadwidth
+		global drawpadheight
+                x1,y1,x2,y2 = drawpad.coords(player)
+                if x1 <= 10:
+                    drawpad.move(player,0,0)
+                else:
+                    drawpad.move(player,-10,0)
+    
         
         
         
@@ -102,8 +126,10 @@ class MyApp:
             #  This will trigger our collision detect function
             didWeHit = self.collisionDetect()
             if didWeHit == True:
-                drawpad.after(10,self.animate) == False
+                drawpad.move(target,0,0)
+                drawpad.itemconfig(target, fill='blue')
             else:
+                drawpad.itemconfig(target, fill='red')
                 drawpad.after(10,self.animate)
                 
             # Use the value of didWeHit to create an if statement
@@ -114,9 +140,16 @@ class MyApp:
                 global target
 		global drawpad
                 global player
+                global didWeHit
+                global target, targetx1, targety1, targetx2, targety2
+                targetx1, targety1, targetx2, targety2 = drawpad.coords(target)
+                x1,y1,x2,y2 = drawpad.coords(player)
+                if x1 >= targetx1 and x2 <= targetx2 and y1 >= targety1 and y2 <= targety2:
+                    return True
+                
                 # Get the co-ordinates of our player AND our target
                 # using x1,y1,x2,y2 = drawpad.coords(object)
-
+                
                 # Do your if statement - remember to return True if successful!                
 		
 myapp = MyApp(root)
